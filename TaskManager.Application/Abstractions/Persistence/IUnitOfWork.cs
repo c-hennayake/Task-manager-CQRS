@@ -4,7 +4,11 @@ using System.Text;
 
 namespace TaskManager.Application.Abstractions.Persistence
 {
-    internal interface IUnitOfWork
+    public interface IUnitOfWork
     {
+        ITaskRepository Tasks { get; }
+
+        Task<int> SaveChangesAsync(
+            CancellationToken cancellationToken = default);
     }
 }
