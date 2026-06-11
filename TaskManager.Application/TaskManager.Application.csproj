@@ -12,11 +12,14 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Features\Tasks\" />
+    <Folder Include="Features\Tasks\Commands\DeleteTask\" />
+    <Folder Include="Features\Tasks\Commands\UpdateTask\" />
+    <Folder Include="Features\Tasks\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
   </ItemGroup>
 
