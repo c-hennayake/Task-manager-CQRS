@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Features\Tasks\Commands\DeleteTask\" />
-    <Folder Include="Features\Tasks\Commands\UpdateTask\" />
     <Folder Include="Features\Tasks\Validators\" />
   </ItemGroup>
 

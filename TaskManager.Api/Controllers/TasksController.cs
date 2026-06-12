@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.Features.Tasks.Commands.CreateTask;
+using TaskManager.Application.Features.Tasks.Commands.DeleteTask;
+using TaskManager.Application.Features.Tasks.Commands.UpdateTask;
 using TaskManager.Application.Features.Tasks.Queries.GetAllTasks;
 using TaskManager.Application.Features.Tasks.Queries.GetTaskById;
 
@@ -45,6 +47,37 @@ namespace TaskManager.Api.Controllers
                 return NotFound();
 
             return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateTaskCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return NotFound();
+
+            return Ok(new
+            {
+                Message = "Task updated successfully"
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeleteTaskCommand(id));
+
+            if (!result)
+                return NotFound(new
+                {
+                    Message = "Task not found"
+                });
+
+            return Ok(new
+            {
+                Message = "Task deleted successfully"
+            });
         }
     }
 }
