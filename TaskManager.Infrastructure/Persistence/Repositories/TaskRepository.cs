@@ -46,5 +46,32 @@ namespace TaskManager.Infrastructure.Persistence.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+
+        public async Task<List<TaskItem>> GetPagedTasksAsync(
+    int pageNumber,
+    int pageSize,
+    string? search,
+    bool? isCompleted)
+        {
+            var query = _context.Tasks.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(x =>
+                    x.Title.Contains(search));
+            }
+
+            if (isCompleted.HasValue)
+            {
+                query = query.Where(x =>
+                    x.IsCompleted == isCompleted.Value);
+            }
+
+            return await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

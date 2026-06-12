@@ -32,9 +32,10 @@ namespace TaskManager.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] GetAllTasksQuery query)
         {
-            var result = await _mediator.Send(new GetAllTasksQuery());
+            var result = await _mediator.Send(query);
 
             return Ok(result);
         }

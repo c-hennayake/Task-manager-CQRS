@@ -18,7 +18,11 @@ namespace TaskManager.Application.Features.Tasks.Queries.GetAllTasks
             GetAllTasksQuery request,
             CancellationToken cancellationToken)
         {
-            var tasks = await _taskRepository.GetAllAsync();
+            var tasks = await _taskRepository.GetPagedTasksAsync(
+                request.PageNumber,
+                request.PageSize,
+                request.Search,
+                request.IsCompleted);
 
             return tasks.Select(x => new TaskDto
             {
