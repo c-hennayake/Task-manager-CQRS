@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using TaskManager.Application.Abstractions.Persistence;
+using TaskManager.Application.Exceptions;
 using TaskManager.Application.Features.Tasks.DTOs;
 
 namespace TaskManager.Application.Features.Tasks.Queries.GetTaskById
 {
     public class GetTaskByIdHandler
-        : IRequestHandler<GetTaskByIdQuery, TaskDto?>
+        : IRequestHandler<GetTaskByIdQuery, TaskDto>
     {
         private readonly ITaskRepository _taskRepository;
 
@@ -14,14 +15,17 @@ namespace TaskManager.Application.Features.Tasks.Queries.GetTaskById
             _taskRepository = taskRepository;
         }
 
-        public async Task<TaskDto?> Handle(
+        public async Task<TaskDto> Handle(
             GetTaskByIdQuery request,
             CancellationToken cancellationToken)
         {
             var task = await _taskRepository.GetByIdAsync(request.Id);
 
             if (task == null)
-                return null;
+            {
+                throw new NotFoundException(
+                    $"Task with Id {request.Id} was not found.");
+            }
 
             return new TaskDto
             {

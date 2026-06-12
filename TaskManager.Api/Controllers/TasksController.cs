@@ -20,15 +20,16 @@ namespace TaskManager.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(
-            CreateTaskCommand command)
+        public async Task<IActionResult> Create(CreateTaskCommand command)
         {
-            var result =
-                await _mediator.Send(command);
+            var taskId = await _mediator.Send(command);
 
-            return Ok(result);
+            return Ok(new
+            {
+                Message = "Task created successfully",
+                TaskId = taskId
+            });
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -43,19 +44,15 @@ namespace TaskManager.Api.Controllers
         {
             var result = await _mediator.Send(new GetTaskByIdQuery(id));
 
-            if (result == null)
-                return NotFound();
-
             return Ok(result);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateTaskCommand command)
         {
-            var result = await _mediator.Send(command);
+            command.Id = id;
 
-            if (!result)
-                return NotFound();
+            await _mediator.Send(command);
 
             return Ok(new
             {
@@ -66,13 +63,7 @@ namespace TaskManager.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _mediator.Send(new DeleteTaskCommand(id));
-
-            if (!result)
-                return NotFound(new
-                {
-                    Message = "Task not found"
-                });
+            await _mediator.Send(new DeleteTaskCommand(id));
 
             return Ok(new
             {

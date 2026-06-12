@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using TaskManager.Application.Abstractions.Persistence;
+using TaskManager.Application.Exceptions;
 
 namespace TaskManager.Application.Features.Tasks.Commands.UpdateTask
 {
@@ -19,7 +20,10 @@ namespace TaskManager.Application.Features.Tasks.Commands.UpdateTask
             var task = await _taskRepository.GetByIdAsync(request.Id);
 
             if (task == null)
-                return false;
+            {
+                throw new NotFoundException(
+                    $"Task with Id {request.Id} was not found.");
+            }
 
             task.Title = request.Title;
             task.Description = request.Description;

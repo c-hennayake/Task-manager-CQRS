@@ -1,4 +1,5 @@
 using FluentValidation;
+using TaskManager.API.Middlewares;
 using TaskManager.Application.Features.Tasks.Commands.CreateTask;
 using TaskManager.Infrastructure.DependencyInjection;
 
@@ -31,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
